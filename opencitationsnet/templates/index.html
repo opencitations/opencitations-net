@@ -1,0 +1,42 @@
+{% extends "base.html" %}{% load hosts %}
+
+{% block title %}Home{% endblock %}
+
+{% block extrahead %}{% if feed %}
+<link rel="alternate" type="application/rss+xml" title="{{ feed.feed.title }}" href="{{ feed.href }}" />
+{% endif %}{% endblock %}
+
+{% block body %}
+<section>
+  {% if feed %}
+    <aside class="blog-feed">
+      <h2><a href="{{ feed.feed.link }}">Project blog</a></h2>
+
+      {% for entry in feed.entries|slice:":5" %}
+        <article class="blog-entry">
+          <h3><a href="{{ entry.link }}">{{ entry.title }}</a></h3>
+
+          <p class="blog-entry-date">{{ entry.updated_datetime }}</p>
+
+          {{ entry.content.0.value|truncatewords_html:20|safe }}
+
+          <p class="blog-entry-more"><a href="{{ entry.link }}">Continue reading &#10145;</a></p>
+        </article>
+      {% endfor %}
+    </aside>
+  {% endif %}
+    
+  <h1>Home</h1>
+  
+  <p>Open Citations is a public RDF triplestore for biomedical literature
+     citations. Our aim is to harvest the reference lists from many current
+     and recent open access journal articles, and to convert these datasets
+     into RDF, starting with those in UK Pubmed Central.</p>
+  
+  <p>The project was funded by the <a href="http://www.jisc.ac.uk/">JISC</a>
+     <a href="http://www.jisc.ac.uk/whatwedo/programmes/inf11/jiscexpo.aspx">jiscEXPO
+     strand</a>.</p>
+     
+  <div style="clear:both;"> </div>
+</section>
+{% endblock %}

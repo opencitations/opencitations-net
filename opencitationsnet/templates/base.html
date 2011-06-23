@@ -1,12 +1,14 @@
 {% load hosts %}<!DOCTYPE html>
 <html lang="en" xml:lang="en">
   <head>
-    <title>{% block title %}{% endblock %}OpenCitations.net</title>
-    <meta rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}base.css"/>
+    <title>{% block title %}{% endblock %} | JISC Open Citations</title>
+    <link rel="stylesheet" type="text/css" href="/site-media/base.css"/>
+    <meta charset="utf-8"/>
+    {% block extrahead %}{% endblock %}
   </head>
-  <body>
+  <body><div class="container">
     <header>
-      <span>OpenCitations.net</span>
+      <div class="title">JISC Open Citations</div>
     </header>
     <nav>
       <ul>
@@ -17,8 +19,10 @@
     {% block body %}{% endblock %}
 
     <footer>
-      A JISC Project
+      A <a href="http://www.jisc.ac.uk/">JISC</a> project at
+      <a href="http://ibrg.zoo.ox.ac.uk/">IBRG</a>, <a href="http://www.zoo.ox.ac.uk/">Department of Zoology</a>,
+      <a href="http://www.ox.ac.uk/">University of Oxford</a>
     </footer>
-  </body>
+  </div></body>
 </html>
 

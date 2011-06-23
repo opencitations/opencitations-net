@@ -1,3 +1,5 @@
+import datetime
+
 import feedparser, pytz
 
 from django.http import Http404, HttpResponsePermanentRedirect
@@ -13,10 +15,11 @@ from humfrey.utils.cache import cached_view
 class IndexView(BaseView):
     def initial_context(self, request):
         try:
-            feed = feedparser.parse("http://clarosdata.wordpress.com/feed/")
+            feed = feedparser.parse("http://opencitations.wordpress.com/feed/")
             for entry in feed.entries:
                 entry.updated_datetime = datetime.datetime(*entry.updated_parsed[:6], tzinfo=pytz.utc).astimezone(pytz.timezone(settings.TIME_ZONE))
         except Exception, e:
+            raise
             feed = None
         return {
             'feed': feed,
