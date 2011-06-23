@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% load hosts %}
+
+{% block title %}Not Found{% endblock %}
+
+{% block body %}
+<section>
+  <h1>This is not the site you're looking for</h1>
+
+  <p>There is nothing on this domain. You might be interested in going to the <a href="{% host_url index on data %}">OpenCitations website</a>.</p>
+</section>
+{% endblock %}
+

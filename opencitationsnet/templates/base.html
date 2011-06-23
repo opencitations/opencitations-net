@@ -1,0 +1,24 @@
+{% load hosts %}<!DOCTYPE html>
+<html lang="en" xml:lang="en">
+  <head>
+    <title>{% block title %}{% endblock %}OpenCitations.net</title>
+    <meta rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}base.css"/>
+  </head>
+  <body>
+    <header>
+      <span>OpenCitations.net</span>
+    </header>
+    <nav>
+      <ul>
+        <li><a href="{% host_url index on data %}">Home</a></li>
+      </ul>
+    </nav>
+
+    {% block body %}{% endblock %}
+
+    <footer>
+      A JISC Project
+    </footer>
+  </body>
+</html>
+
