@@ -20,7 +20,9 @@
     {% if not forloop.last %}&#8226;{% endif %}
   {% endfor %}
   
-  <img src="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&format=png" width="100%"/>
+  <div style="max-width:100% ; overflow:scroll; max-height:600px">
+  <img src="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&amp;format=png&amp;depth={{ depth }}&amp;direction={{ direction }}&amp;minimal={{ minimal }}&amp;layout={{ layout }}" style=="max-width:100%"/>
+  </div>
   
   {% include "queries.html" %}
 </article>

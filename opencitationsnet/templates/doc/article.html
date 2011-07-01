@@ -45,9 +45,9 @@
 
 {% block doc_toolbox_top %}
 <section>
-  <h2>Citation networks</h2>
+  <h2>Example citation networks</h2>
   <ul>
-    <li><a href="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&amp;format=png">PNG</a></li>
+    <li><a href="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&amp;format=png&amp;direction=citedBy">PNG</a></li>
     <li><a href="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&amp;format=gv">DOT (GraphViz)</a></li>
     <li><a href="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&amp;format=graphml">GraphML</a></li>
   </ul>
@@ -55,8 +55,66 @@
 {% endblock %}
 
 {% block doc_detail %}
-<section>
-  <div id="graph_container"> </div>
-</section>
+<h2>Citation network</h2>
+
+<p style="text-align:center;">
+<img src="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&amp;format=png&amp;direction=cites&amp;minimal=true&amp;layout=dot" alt=""/>
+</p>
+
+<form method="get" action="{% host_url citation-network on data %}">
+  <input type="hidden" name="uri" value="{{ subject.uri }}"/>
+  <table>
+    <tbody>
+      <tr>
+        <td>Direction:</td>
+        <td><select name="direction">
+          <option value="citedBy">articles that cite this paper</option>
+          <option value="cites">articles cited by this paper</option>
+          <option value="both">both</option>
+        </select></td>
+      </tr>
+      <tr>
+        <td>Detail:</td>
+        <td><select name="minimal">
+          <option value="">full</option>
+          <option value="true">minimal</option>
+        </select></td>
+      </tr>
+      <tr>
+        <td>Layout algorithm:</td>
+        <td><select name="layout">
+          <option value="fdp">fdp</option>
+          <option value="circo">circo</option>
+          <option value="dot">dot</option>
+          <option value="neato">neato</option>
+          <option value="nop">nop</option>
+          <option value="nop1">nop1</option>
+          <option value="nop2">nop2</option>
+          <option value="osage">osage</option>
+          <option value="patchwork">patchwork</option>
+          <option value="sfdp">sfdp</option>
+          <option value="twopi">twopi</option>
+        </select></td>
+      </tr>
+      <tr>
+        <td>Output format:</td>
+        <td><select name="format">
+          <option value="html">HTML</option>
+          <option value="png">PNG</option>
+          <option value="pdf">PDF</option>
+          <option value="ps">PostScript</option>
+          <option value="jpeg">JPEG</option>
+          <option value="gv">GraphViz (dot)</option>
+          <option value="graphml">GraphML</option>
+          <option value="svg">Scalable Vector Graphics (SVG)</option>
+          <option value="xdot">xDOT</option>
+        </select></td>
+      </tr>
+    </tbody>
+  </table>
+  <input type="submit" value="Generate network diagram"/>
+</form>
+        
+
 {{ block.super }}
 {% endblock %}

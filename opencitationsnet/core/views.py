@@ -61,7 +61,7 @@ class ServerErrorView(BaseView):
 
 class CannedQueryView(EndpointView, ResultSetView, RDFView):
     subject_type = None
-
+    
     def handle_GET(self, request, context):
         results = self.endpoint.query(self._QUERY)
 
@@ -206,6 +206,11 @@ class CitationNetworkView(EndpointView, RDFView):
             'subjects': subjects,
             'subject': Resource(uri, graph, self.endpoint),
             'hexhashes': hexhashes,
+            'depth': depth,
+            'layout': request.GET.get('layout'),
+            'direction': request.GET.get('direction'),
+            'minimal': request.GET.get('minimal'),
+            
         })
 
         return self.render(request, context, 'citation-network')
@@ -227,7 +232,6 @@ class CitationNetworkView(EndpointView, RDFView):
             layout = request.GET.get('layout')
             if layout not in self._DOT_LAYOUTS:
                 layout = 'fdp'
-            context['minimal'] = request.GET.get('minimal') == 'true'
             template = loader.get_template(template_name + '.gv')
             plain_gv = template.render(RequestContext(request, context))
             dot = subprocess.Popen(['dot', '-K'+layout, '-T'+dot_output], stdin=subprocess.PIPE, stdout=subprocess.PIPE)

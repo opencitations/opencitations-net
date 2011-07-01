@@ -17,9 +17,9 @@
       <input id="identifier" name="identifier" value="{{ identifier|default_if_none:"" }}"/>
       <input type="submit" value="Search"/>
     </form>
-
+    
     <p>Alternatively, provide a string for which to return exact matches.</p>
-
+    
     <form method="get" action="">
       <label for="query">Query:</label>
       <input id="query" name="query" value="{{ query|default_if_none:"" }}"/>
