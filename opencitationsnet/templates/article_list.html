@@ -5,7 +5,7 @@
 {% block body %}
 <article>
   <h1>Article examples</h1>
-  
+
   <p>Below is an arbitrary selection of articles referenced by the PubMedCentral Open-Access subset.</p>
 
   <table class="results">
@@ -17,16 +17,16 @@
         <th>Identifiers</th>
       </tr>
     </thead>  
-    <tbody>{% for row in results %}
+    <tbody>{% for article in subjects %}
       <tr class="row-{% cycle "odd" "even" %}">
-        <td><a href="{{ row.article.doc_url }}">{{ row.title }}</a></td>
-        <td>{{ row.authors|default_if_none:"" }}</td>
-        <td>{{ row.date|default_if_none:""|slice:":4" }}</td>
+        <td><a href="{{ article.doc_url }}">{{ article.dcterms_title }}</a></td>
+        <td>{% for author in article.all.dcterms_creator %}{{ author.label }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+        <td>{{ article.dcterms_date|default_if_none:""|slice:":4" }}</td>
         <td class="identifiers">
           <dl>
-            {% if row.doi %}<dt>DOI:</dt> <dd class="article-doi">{{ row.doi }}</dd>{% endif %}
-            {% if row.pmid %}<dt>PMID:</dt> <dd class="article-pmid">{{ row.pmid }}</dd>{% endif %}
-            {% if row.pmc %}<dt>PMC:</dt> <dd class="article-pmc">{{ row.pmc }}</dd>{% endif %}
+            {% if article.prism_doi %}<dt>DOI:</dt> <dd class="article-doi">{{ article.prism_doi }}</dd>{% endif %}
+            {% if article.fabio_hasPubMedId %}<dt>PMID:</dt> <dd class="article-pmid">{{ article.fabio_hasPubMedId }}</dd>{% endif %}
+            {% if article.fabio_hasPubMedCentralId %}<dt>PMC:</dt> <dd class="article-pmc">{{ article.fabio_hasPubMedCentralId }}</dd>{% endif %}
           </dl>
         </td>
       </tr>{% endfor %}

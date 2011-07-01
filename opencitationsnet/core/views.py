@@ -60,6 +60,8 @@ class ServerErrorView(BaseView):
         return self.render(request, context, '500')
 
 class CannedQueryView(EndpointView, ResultSetView, RDFView):
+    subject_type = None
+
     def handle_GET(self, request, context):
         results = self.endpoint.query(self._QUERY)
 
@@ -67,6 +69,7 @@ class CannedQueryView(EndpointView, ResultSetView, RDFView):
             context['results'] = results
         elif isinstance(results, rdflib.ConjunctiveGraph):
             context['graph'] = results
+            context['subjects'] = set(Resource(s, results, self.endpoint) for s in results.subjects(NS.rdf.type, self.subject_type))
         elif isinstance(results, bool):
             context['result'] = results
         if hasattr(results, 'query'):
@@ -116,17 +119,27 @@ class JournalListView(CannedQueryView):
 
 class ArticleListView(CannedQueryView):
     _QUERY = """
-      SELECT ?article (SAMPLE(?title_) as ?title) (SAMPLE(?date_) as ?date) (GROUP_CONCAT(?author_name ; separator="; ") as ?authors) (SAMPLE(?doi_) as ?doi) (SAMPLE(?pmid_) as ?pmid) (SAMPLE(?pmc_) as ?pmc) WHERE {
+      CONSTRUCT {
         ?article a fabio:JournalArticle ;
-          dcterms:title ?title_ .
-        OPTIONAL { ?article dcterms:date ?date_ } .
-        OPTIONAL { ?article dcterms:creator/rdfs:label ?author_name } .
-        OPTIONAL { ?article prism:doi ?doi_ } .
-        OPTIONAL { ?article fabio:hasPubMedId ?pmid_ } .
-        OPTIONAL { ?article fabio:hasPubMedCentralId ?pmc_ } .
-      } GROUP BY ?article LIMIT 200
+          dcterms:title ?title ;
+          dcterms:creator ?creator ;
+          dcterms:date ?date ;
+          prism:doi ?doi ;
+          fabio:hasPubMedId ?pmid ;
+          fabio:hasPubMedCentralId ?pmc .
+        ?creator a foaf:Person ;
+          foaf:name ?creator_name .
+       } WHERE {
+         { SELECT * WHERE { ?article a fabio:JournalArticle ; dcterms:title ?title } LIMIT 200 } .
+         OPTIONAL { ?article dcterms:creator ?creator . ?creator a foaf:Person ; foaf:name ?creator_name } .
+         OPTIONAL { ?article prism:doi ?doi } .
+         OPTIONAL { ?article fabio:hasPubMedId ?pmid } .
+         OPTIONAL { ?article fabio:hasPubMedCentralId ?pmc } .
+         OPTIONAL { ?article dcterms:date ?date } .
+      } LIMIT 200
     """
 
+    subject_type = NS.fabio.JournalArticle
     template_name = 'article_list'
 
 class OrganizationListView(CannedQueryView):
