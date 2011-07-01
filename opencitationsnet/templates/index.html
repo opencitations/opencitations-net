@@ -21,9 +21,14 @@
      <a href="http://www.jisc.ac.uk/whatwedo/programmes/inf11/jiscexpo.aspx">jiscEXPO
      strand</a>.</p>
      
+  <p>This website is an exemplar, allowing access to roughly one tenth of the
+     data in the PubMed Central Open Access corpus. The entire dataset can be
+     downloaded from our <a href="{% host_url source-data on data %}">source
+     data</a> page.</p>
+
 {% if feed %}
   <section class="blog-feed">
-    <h2><a href="{{ feed.feed.link }}">Project blog</a></h2>
+    <h2><a href="{{ feed.feed.link }}">Project blog</a> — recent posts:</h2>
 
     {% for entry in feed.entries|slice:":9" %}
       <article class="blog-entry{% if forloop.counter0|divisibleby:3 %} clear-left{% endif %}">

@@ -1,6 +1,6 @@
 {% extends "doc/base.html" %}{% load humfrey_desc %}{% load hosts %}
 
-{% block extrahead %}{{ block.super }}
+{% block extrahead %}{{ block.super }}{% comment %}
 <script type="application/javascript" src="http://www.ryandesign.com/canviz/canviz.js"></script>
 <script type="application/javascript" src="http://www.ryandesign.com/canviz/path/path.js"></script>
 <script type="application/javascript">
@@ -14,10 +14,9 @@
     
     //canviz.draw();
   });
-
   
 </script>
-{% endblock %}
+{% endcomment %}{% endblock %}
 
 {% block doc_intro %}
   <h1 class="article-title">
@@ -48,6 +47,7 @@
 <section>
   <h2>Citation networks</h2>
   <ul>
+    <li><a href="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&amp;format=png">PNG</a></li>
     <li><a href="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&amp;format=gv">DOT (GraphViz)</a></li>
     <li><a href="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&amp;format=graphml">GraphML</a></li>
   </ul>
