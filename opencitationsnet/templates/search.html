@@ -1,0 +1,53 @@
+{% extends "base.html" %}{% load humfrey_desc %}
+
+{% block title %}Search{% if query_term %}: {{ query_term }}{% endif %}{% endblock %}
+
+{% block body %}
+
+<article>
+  <h1>Search</h1>
+  
+  <section>
+    <h2>Query</h2>
+    
+    <p>Enter an identifier (e.g. ISBN, ISSN, eISSN, DOI, PMID, PMCID) to search for.</p>
+    
+    <form method="get" action="">
+      <label for="query">Search identifiers:</label>
+      <input id="query" name="query" value="{{ query_term|default_if_none:"" }}"/>
+      <input type="submit" value="Search"/>
+    </form>
+  </section>
+  
+  {% if results %}
+  <section>
+    <h2>Results</h2>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+{% if results.0.thing %}
+{% for result in results %}
+        <tr>
+          <td><a href="{{ result.thing.doc_url }}">{{ result.label|default_if_none:"<em>Unnamed entity</em>" }}</a></td>
+          <td>{{ result.type|node }}</td>
+        </tr>
+{% endfor %}
+{% else %}
+        <tr>
+          <td colspan="2">No results were found.</td>
+        </tr>
+{% endif %}
+      </tbody>
+    </table>
+  </section>
+  {% endif %}
+  
+  {% include "queries.html" %}
+</article>
+{% endblock %}

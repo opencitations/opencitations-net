@@ -7,24 +7,8 @@
 {% endif %}{% endblock %}
 
 {% block body %}
-<section>
-  {% if feed %}
-    <aside class="blog-feed">
-      <h2><a href="{{ feed.feed.link }}">Project blog</a></h2>
+<article>
 
-      {% for entry in feed.entries|slice:":5" %}
-        <article class="blog-entry">
-          <h3><a href="{{ entry.link }}">{{ entry.title }}</a></h3>
-
-          <p class="blog-entry-date">{{ entry.updated_datetime }}</p>
-
-          {{ entry.content.0.value|truncatewords_html:20|safe }}
-
-          <p class="blog-entry-more"><a href="{{ entry.link }}">Continue reading &#10145;</a></p>
-        </article>
-      {% endfor %}
-    </aside>
-  {% endif %}
     
   <h1>Home</h1>
   
@@ -33,10 +17,29 @@
      and recent open access journal articles, and to convert these datasets
      into RDF, starting with those in UK Pubmed Central.</p>
   
-  <p>The project was funded by the <a href="http://www.jisc.ac.uk/">JISC</a>
+  <p>The project was funded by the <a href="http://www.jisc.ac.uk/">JISC</a>'s
      <a href="http://www.jisc.ac.uk/whatwedo/programmes/inf11/jiscexpo.aspx">jiscEXPO
      strand</a>.</p>
      
+{% if feed %}
+  <section class="blog-feed">
+    <h2><a href="{{ feed.feed.link }}">Project blog</a></h2>
+
+    {% for entry in feed.entries|slice:":9" %}
+      <article class="blog-entry{% if forloop.counter0|divisibleby:3 %} clear-left{% endif %}">
+        <h3><a href="{{ entry.link }}">{{ entry.title }}</a></h3>
+
+        <p class="blog-entry-date">{{ entry.updated_datetime }}</p>
+
+        {{ entry.content.0.value|truncatewords_html:30|safe }}
+
+        <p class="blog-entry-more"><a href="{{ entry.link }}">Continue reading &#10145;</a></p>
+      </article>
+        
+    {% endfor %}
+  </section>
+{% endif %}
+     
   <div style="clear:both;"> </div>
-</section>
+</article>
 {% endblock %}

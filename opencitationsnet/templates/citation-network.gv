@@ -1,0 +1,7 @@
+digraph default {
+  graph [outputOrder=edgesfirst];
+  node [style=filled, label="\N", shape=box, fontsize=9, fillcolor=white, margin="0.04,0.01"];
+  edge [color=darkgray, arrowType="empty"];{% for article in subjects %}
+  a_{{ article.hexhash }} [label="{{ article.label|truncatewords:5 }}", tooltip="{{ article.label }}" href="{{ article.doc_url }}"{% if article.hexhash == subject.hexhash %}, fillcolor=black, fontcolor=white{% endif %}{% if article.dcterms_published %}, date="{{ article.dcterms_published }}"{% endif %}];{% for cited in article.all.cito_cites %}
+  a_{{ article.hexhash }} -> a_{{ cited.hexhash }} ;{% endfor %}{% endfor %}
+}

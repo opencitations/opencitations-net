@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Journals{% endblock %}
+
+{% block body %}
+<article>
+  <h1>Journal examples</h1>
+  
+  <p>Below is an arbitrary selection of journals referenced by the PubMedCentral Open-Access subset.</p>
+
+  <table class="results">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>ISSN</th>
+        <th>eISSN</th>
+      </tr>
+    </thead>  
+    <tbody>{% for row in results %}
+      <tr class="row-{% cycle "odd" "even" %}">
+        <td><a href="{{ row.journal.doc_url }}">{{ row.title }}</a></td>
+        <td>{{ row.issn|default_if_none:"" }}</td>
+        <td>{{ row.eissn|default_if_none:"" }}</td>
+      </tr>{% endfor %}
+    </tbody>
+  
+  </table>
+  
+  {% include "queries.html" %}
+</article>
+  
+{% endblock %}

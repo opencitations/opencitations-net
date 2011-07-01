@@ -1,15 +1,23 @@
 import datetime
+import subprocess
 
-import feedparser, pytz
+import feedparser
+import pytz
+import rdflib
+from rdflib import URIRef, Literal
 
-from django.http import Http404, HttpResponsePermanentRedirect
+from django.http import Http404, HttpResponse, HttpResponsePermanentRedirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.shortcuts import render_to_response
+from django.template import loader, RequestContext
+from django.template.defaultfilters import slugify
+
 
 from humfrey.linkeddata.views import EndpointView, RDFView, ResultSetView
 from humfrey.utils.resource import Resource
 from humfrey.utils.namespaces import NS
-from humfrey.utils.views import BaseView
+from humfrey.utils.views import BaseView, renderer
 from humfrey.utils.cache import cached_view
 
 class IndexView(BaseView):
@@ -50,3 +58,184 @@ class ServerErrorView(BaseView):
     def handle_GET(self, request, context):
         context['status_code'] = 500
         return self.render(request, context, '500')
+
+class CannedQueryView(EndpointView, ResultSetView, RDFView):
+    def handle_GET(self, request, context):
+        results = self.endpoint.query(self._QUERY)
+        
+        if isinstance(results, list):
+            context['results'] = results
+        elif isinstance(results, rdflib.ConjunctiveGraph):
+            context['graph'] = results
+        elif isinstance(results, bool):
+            context['result'] = results
+        if hasattr(results, 'query'):
+            context['queries'] = [results.query]
+
+        return self.render(request, context, self.template_name)      
+
+class SearchView(EndpointView, ResultSetView):
+    _QUERY = """
+      SELECT ?thing (SAMPLE(?label_) as ?label) (SAMPLE(?type_) as ?type) WHERE {
+        ?thing ?p %s ;
+          a ?type_ .
+        FILTER (?p in (prism:issn, prism:eIssn, prism:isbn, prism:doi, fabio:hasPubMedId, fabio:hasPubMedCentralId, dcterms:identifier, rdfs:label, skos:prefLabel)) .
+        OPTIONAL {
+          ?thing ?label_predicate ?label_ .
+          FILTER (?label_predicate in (skos:prefLabel, rdfs:label, dcterms:title, foaf:name, dcterms:identifier, rdfs:label))
+        } .
+      } GROUP BY ?thing LIMIT 100
+    """
+    
+    def handle_GET(self, request, context):
+        query_term = request.GET.get('query', '').strip()
+        if query_term:
+            self.perform_query(context, query_term)
+        return self.render(request, context, 'search')
+    
+    def perform_query(self, context, query_term):
+        results = self.endpoint.query(self._QUERY % Literal(query_term).n3())
+        context.update({
+            'results': results,
+            'queries': [results.query],
+            'query_term': query_term,
+        })
+        
+
+class JournalListView(CannedQueryView):
+    _QUERY = """
+      SELECT ?journal ?title ?issn ?eissn WHERE {
+        ?journal a fabio:Journal ;
+          dcterms:title ?title ;
+          prism:issn ?issn .
+        OPTIONAL { ?journal prism:eIssn ?eissn }
+      } ORDER BY ?title
+    """
+    
+    template_name = 'journal_list'
+
+class ArticleListView(CannedQueryView):
+    _QUERY = """
+      SELECT ?article (SAMPLE(?title_) as ?title) (SAMPLE(?date_) as ?date) (GROUP_CONCAT(?author_name ; separator="; ") as ?authors) (SAMPLE(?doi_) as ?doi) (SAMPLE(?pmid_) as ?pmid) (SAMPLE(?pmc_) as ?pmc) WHERE {
+        ?article a fabio:JournalArticle ;
+          dcterms:title ?title_ .
+        OPTIONAL { ?article dcterms:date ?date_ } .
+        OPTIONAL { ?article dcterms:creator/rdfs:label ?author_name } .
+        OPTIONAL { ?article prism:doi ?doi_ } .
+        OPTIONAL { ?article fabio:hasPubMedId ?pmid_ } .
+        OPTIONAL { ?article fabio:hasPubMedCentralId ?pmc_ } .
+      } GROUP BY ?article LIMIT 200
+    """
+    
+    template_name = 'article_list'
+
+class OrganizationListView(CannedQueryView):
+    _QUERY = """
+      SELECT ?organization (SAMPLE(?name_) as ?name) (SAMPLE(?address_) as ?address) WHERE {
+        ?organization a org:Organization ;
+          rdfs:label ?name_ .
+        OPTIONAL { ?organization v:adr/rdfs:label ?address_ } .
+      } GROUP BY ?organization LIMIT 200
+    """
+    
+    template_name = 'organization_list'
+
+class CitationNetworkView(EndpointView, RDFView):
+    _QUERY = """
+      CONSTRUCT {
+        ?article a ?type ;
+          dcterms:title ?title ;
+          dcterms:published ?published ;
+          cito:cites ?cited .
+        ?cited a ?citedType ;
+          dcterms:title ?citedTitle ;
+          dcterms:published ?citedPublished .
+      } WHERE {
+        { SELECT DISTINCT ?article WHERE { ?article (cito:cites|^cito:cites){,%(depth)d} %(uri)s } } .
+        ?article a ?type ;
+          dcterms:title ?title .
+        OPTIONAL { ?article dcterms:published ?published } .
+        OPTIONAL {
+          ?article cito:cites ?cited .
+            ?cited a ?citedType ;
+            dcterms:title ?citedTitle .
+          OPTIONAL { ?cited dcterms:published ?citedPublished } .
+        } .
+      }
+    """
+    def handle_GET(self, request, context):
+        uri = URIRef(request.GET.get('uri', ''))
+        types = self.get_types(uri)
+        if not types:
+            raise Http404
+        try:
+            depth = max(0, min(int(request.GET.get('depth')), 3))
+        except (TypeError, ValueError):
+            depth = 2 
+        
+        query = self._QUERY % {'uri': uri.n3(), 'depth': depth}
+        graph = self.endpoint.query(query)
+        
+        context.update({
+            'graph': graph,
+            'queries': [graph.query],
+            'subjects': [Resource(s, graph, self.endpoint) for s in set(graph.subjects())],
+            'subject': Resource(uri, graph, self.endpoint),
+        })
+        
+        return self.render(request, context, 'citation-network')
+
+    _DOT_LAYOUTS = "circo dot fdp neato nop nop1 nop2 osage patchwork sfdp twopi".split()
+    _DOT_OUTPUTS = [
+        dict(format='bmp', mimetypes=('image/x-bmp','image/x-ms-bmp'), name='BMP', dot_output='bmp'),
+        dict(format='xdot', mimetypes=('text/vnd.graphviz',), name='xDOT', dot_output='xdot', priority=0.9),
+        dict(format='gv', mimetypes=('text/vnd.graphviz',), name='DOT (GraphViz)', dot_output='gv'),
+        dict(format='jpeg', mimetypes=('image/jpeg',), name='JPEG', dot_output='jpeg'),
+        dict(format='png', mimetypes=('image/png',), name='PNG', dot_output='png'),
+        dict(format='ps', mimetypes=('application/postscript',), name='PostScript', dot_output='ps'),
+        dict(format='pdf', mimetypes=('application/pdf',), name='PDF', dot_output='pdf'),
+        dict(format='svg', mimetypes=('image/svg+xml',), name='SVG', dot_output='svg'),
+    ]
+    
+    def _get_dot_renderer(output):
+        def dot_renderer(self, request, context, template_name):
+            layout = request.GET.get('layout')
+            if layout not in self._DOT_LAYOUTS:
+                layout = 'fdp'
+            template = loader.get_template(template_name + '.gv')
+            plain_gv = template.render(RequestContext(request, context))
+            dot = subprocess.Popen(['dot', '-K'+layout, '-T'+dot_output], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            dot_stdout, _ = dot.communicate(input=plain_gv.encode('utf-8'))
+            response = HttpResponse(dot_stdout, mimetype=output['mimetypes'][0])
+            response['Content-Disposition'] = 'inline; filename="%s.%s"' % (slugify(context['subject'].dcterms_title)[:32], output['format'])
+            return response
+        
+        dot_output = output.pop('dot_output')
+        dot_renderer.__name__ = 'render_%s' % output['format']
+        return renderer(**output)(dot_renderer)
+    
+    for output in _DOT_OUTPUTS:
+        locals()['render_%s' % output['format']] = _get_dot_renderer(output)
+    del _get_dot_renderer, output
+
+
+    @renderer(format="gv", mimetypes=('text/vnd.graphviz',), name="DOT (GraphViz)")
+    def render_gv(self, request, context, template_name):
+        layout = request.GET.get('layout')
+        if layout not in self._DOT_LAYOUTS:
+            layout = 'fdp'
+        template = loader.get_template(template_name + '.gv')
+        plain_gv = template.render(RequestContext(request, context))
+        dot = subprocess.Popen(['dot', '-K'+layout, '-Txdot'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        dot_stdout, _ = dot.communicate(input=plain_gv.encode('utf-8'))
+        response = HttpResponse(dot_stdout, mimetype='text/vnd.graphviz')
+        response['Content-Disposition'] = 'attachment; filename="%s.gv"' % slugify(context['subject'].dcterms_title)[:32]
+        return response
+
+    @renderer(format="graphml", mimetypes=('application/x-graphml+xml',), name="GraphML")
+    def render_graphml(self, request, context, template_name):
+        response = render_to_response(template_name + '.graphml',
+                                      context, context_instance=RequestContext(request),
+                                      mimetype='application/x-graphml+xml')
+        response['Content-Disposition'] = 'attachment; filename="%s.graphml"' % slugify(context['subject'].dcterms_title)[:32]
+        return response

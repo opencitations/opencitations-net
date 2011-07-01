@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Articles{% endblock %}
+
+{% block body %}
+<article>
+  <h1>Article examples</h1>
+  
+  <p>Below is an arbitrary selection of articles referenced by the PubMedCentral Open-Access subset.</p>
+
+  <table class="results">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Authors</th>
+        <th>Year</th>
+        <th>Identifiers</th>
+      </tr>
+    </thead>  
+    <tbody>{% for row in results %}
+      <tr class="row-{% cycle "odd" "even" %}">
+        <td><a href="{{ row.article.doc_url }}">{{ row.title }}</a></td>
+        <td>{{ row.authors|default_if_none:"" }}</td>
+        <td>{{ row.date|default_if_none:""|slice:":4" }}</td>
+        <td class="identifiers">
+          <dl>
+            {% if row.doi %}<dt>DOI:</dt> <dd class="article-doi">{{ row.doi }}</dd>{% endif %}
+            {% if row.pmid %}<dt>PMID:</dt> <dd class="article-pmid">{{ row.pmid }}</dd>{% endif %}
+            {% if row.pmc %}<dt>PMC:</dt> <dd class="article-pmc">{{ row.pmc }}</dd>{% endif %}
+          </dl>
+        </td>
+      </tr>{% endfor %}
+    </tbody>
+  
+  </table>  
+  {% include "queries.html" %}
+</article>
+  
+{% endblock %}

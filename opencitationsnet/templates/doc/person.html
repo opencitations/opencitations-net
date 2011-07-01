@@ -1,0 +1,5 @@
+{% extends "doc/base.html" %}{% load hosts %}
+
+{% block doc_toolbox_metadata_top %}
+  <li><a href="{% host_url sparql on data %}?query=PREFIX%20dcterms%3A%20%3Chttp%3A//purl.org/dc/terms/%3E%0APREFIX%20fabio%3A%20%3Chttp%3A//purl.org/spar/fabio/%3E%0A%0APREFIX%20foaf%3A%20%3Chttp%3A//xmlns.com/foaf/0.1/%3E%0APREFIX%20frbr%3A%20%3Chttp%3A//purl.org/vocab/frbr/core%23%3E%0A%0ASELECT%20%3Farticle%20%3Ftitle%20%3Fpublished%20%3Fjournal%20%3FjournalTitle%20WHERE%20%7B%0A%20%20%3Farticle%20dcterms%3Acreator/foaf%3Aname%20%22{{ subject.foaf_name|urlencode }}%22%20%3B%0A%20%20%20%20dcterms%3Atitle%20%3Ftitle%20.%0A%20%20OPTIONAL%20%7B%20%3Fjournal%20frbr%3Apart%2B%20%3Farticle%20%3B%20a%20fabio%3AJournal%20%3B%20dcterms%3Atitle%20%3FjournalTitle%20%7D%20.%0A%20%20OPTIONAL%20%7B%20%3Farticle%20dcterms%3Apublished%20%3Fpublished%20%7D%20.%0A%7D">Search articles by this author's name.</a></li>
+{% endblock %}

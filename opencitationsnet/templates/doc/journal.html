@@ -1,0 +1,5 @@
+{% extends "doc/base.html" %}
+
+{% block doc_toolbox_metadata_top %}{% if subject.prism_issn %}
+  <li><a href="http://www.worldcat.org/ISSN/{{ subject.prism_issn }}">View at WorldCat</a></li>
+{% endif %}{% endblock %}

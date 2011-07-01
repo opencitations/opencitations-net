@@ -1,0 +1,62 @@
+{% extends "doc/base.html" %}{% load humfrey_desc %}{% load hosts %}
+
+{% block extrahead %}{{ block.super }}
+<script type="application/javascript" src="http://www.ryandesign.com/canviz/canviz.js"></script>
+<script type="application/javascript" src="http://www.ryandesign.com/canviz/path/path.js"></script>
+<script type="application/javascript">
+  var canviz = null;
+  document.observe('dom:loaded', function() {
+    canviz = new Canviz('graph_container');
+    canviz.setScale("1");
+    canviz.setImagePath('graphs/images/');
+    //canviz.load("http:{{ MEDIA_URL }}test.gv");
+    canviz.load("{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&format=xdot");
+    
+    //canviz.draw();
+  });
+
+  
+</script>
+{% endblock %}
+
+{% block doc_intro %}
+  <h1 class="article-title">
+    {{ subject.label }}
+{% if show_follow_link %}
+    <a href="{{ subject.uri }}" style="text-decoration:none; position:relative; top:2px" title="Follow">
+      <img src="{{ MEDIA_URL }}follow.png" alt="" style="border: 0"/>
+    </a>
+{% endif %}
+  </h1>
+  <p class="author-list">{% for author in subject.all.dcterms_creator %}
+    {{ author|node }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+  <p class="article-uri">{{ subject.uri }}</p>
+  <p class="article-identifiers">
+  {% for identifier in subject.identifiers %}
+    {{ identifier.0 }}: {% if identifier.2 %}<a href="{{ identifier.2 }}">{{ identifier.1 }}</a>{% else %}{{ identifier.0 }}{% endif %}
+    {% if not forloop.last %}&#8226;{% endif %}
+  {% endfor %}
+  </p>
+    
+  {% if subject.abstract %}
+    <p class="article-abstract">{{ subject.abstract.rdf_value }}</p>
+  {% endif %}
+{% endblock %}
+
+
+{% block doc_toolbox_top %}
+<section>
+  <h2>Citation networks</h2>
+  <ul>
+    <li><a href="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&amp;format=gv">DOT (GraphViz)</a></li>
+    <li><a href="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&amp;format=graphml">GraphML</a></li>
+  </ul>
+</section>
+{% endblock %}
+
+{% block doc_detail %}
+<section>
+  <div id="graph_container"> </div>
+</section>
+{{ block.super }}
+{% endblock %}

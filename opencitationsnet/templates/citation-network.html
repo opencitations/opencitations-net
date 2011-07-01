@@ -1,0 +1,27 @@
+{% extends "base.html" %}{% load humfrey_desc %}{% load hosts %}
+
+{% block title %}Citation network: {{ subject.label }}{% endblock %}
+
+{% block extrahead %}
+<script type="application/javascript">
+</script>
+{% endblock %}
+
+
+{% block body %}
+<article>
+  <h1><span style="font-size:70%">Citation network for the article:</span><br/>{{ subject.label }}</h1>
+  <p class="author-list">{% for author in subject.all.dcterms_creator %}
+    {{ author|node }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+  <p class="article-uri">{{ subject.uri }}</p>
+  <p class="article-identifiers">
+  {% for identifier in subject.identifiers %}
+    {{ identifier.0 }}: {% if identifier.2 %}<a href="{{ identifier.2 }}">{{ identifier.1 }}</a>{% else %}{{ identifier.0 }}{% endif %}
+    {% if not forloop.last %}&#8226;{% endif %}
+  {% endfor %}
+  
+  <img src="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&format=png" width="100%"/>
+  
+  {% include "queries.html" %}
+</article>
+{% endblock %}

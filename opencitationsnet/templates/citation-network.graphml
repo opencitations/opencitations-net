@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+     http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <graph id="default" edgedefault="directed">{% for article in subjects %}
+    <node id="n_{{ article.hexhash }}">
+      <data key="label">{{ article.label }}</data>{% if article.dcterms_published %}
+      <data key="date">{{ article.dcterms_published }}</date>{% endif %}
+    </node>{% endfor %}{% for article in subjects %}{% for cited in article.all.cito_cites %}
+    <edge id="e_{{ article.hexhash }}_{{ forloop.counter }}" source="n_{{ article.hexhash }}" target="n_{{ cited.hexhash }}"/>{% endfor %}{% endfor %}
+  </graph>
+</graphml>  

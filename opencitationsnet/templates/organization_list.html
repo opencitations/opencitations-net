@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Organizations{% endblock %}
+
+{% block body %}
+<article>
+  <h1>Organization examples</h1>
+  
+  <p>Below is an arbitrary selection of organizations referenced by the PubMedCentral Open-Access subset.</p>
+
+  <table class="results">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Address</th>
+      </tr>
+    </thead>  
+    <tbody>{% for row in results %}
+      <tr class="row-{% cycle "odd" "even" %}">
+        <td><a href="{{ row.organization.doc_url }}">{{ row.name }}</a></td>
+        <td>{{ row.address|default_if_none:"" }}</td>
+      </tr>{% endfor %}
+    </tbody>
+  
+  </table>  
+  {% include "queries.html" %}
+</article>
+  
+{% endblock %}

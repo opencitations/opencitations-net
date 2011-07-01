@@ -4,6 +4,7 @@
     <title>{% block title %}{% endblock %} | JISC Open Citations</title>
     <link rel="stylesheet" type="text/css" href="/site-media/base.css"/>
     <meta charset="utf-8"/>
+    <script type="application/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.6.0.2/prototype.js"></script>
     {% block extrahead %}{% endblock %}
   </head>
   <body><div class="container">
@@ -13,6 +14,14 @@
     <nav>
       <ul>
         <li><a href="{% host_url index on data %}">Home</a></li>
+        <li><a href="{% host_url index on data %}">About</a></li>
+        <li><a href="{% host_url journal-list on data %}">Journals</a></li>
+        <li><a href="{% host_url article-list on data %}">Articles</a></li>
+        <li><a href="{% host_url search on data %}">Search</a></li>
+        <li><a href="{% host_url sparql on data %}">SPARQL</a></li>
+        <li><a href="{% host_url sparql on data %}">Source data</a></li>
+        <li><a href="{% host_url sparql on data %}">Errors in source data</a></li>
+        <li><a href="{% host_url sparql on data %}">Contact</a></li>
       </ul>
     </nav>
 

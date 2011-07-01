@@ -2,32 +2,37 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 from django.views.generic.simple import redirect_to
 
-from humfrey.desc.views import IdView, DocView, DescView, SparqlView
-from humfrey.images.views import ResizedImageView
-from opencitationsnet.core.views import IndexView
-
-from opencitationsnet.core.views import ServerErrorView, ForbiddenView
+from humfrey.desc import views as desc_views
+from humfrey.images import views as images_views
+from opencitationsnet.core import views as core_views
 
 #from humfrey.dataox.views import DatasetView, ExploreView, ExampleDetailView, ExampleResourceView, ExampleQueryView, ContactView, ForbiddenView, HelpView, ResizedImageView
 
 urlpatterns = patterns('',
-    (r'^$', IndexView(), {}, 'index'),
-    (r'^id/.*$', IdView(), {}, 'id'),
+    (r'^$', core_views.IndexView(), {}, 'index'),
+    (r'^id/.*$', desc_views.IdView(), {}, 'id'),
 
-    (r'^doc.+$', DocView(), {}, 'doc'),
-    (r'^doc/$', DocView(), {}, 'doc-generic'),
-    (r'^desc/$', DescView(), {}, 'desc'),
+    (r'^doc.+$', desc_views.DocView(), {}, 'doc'),
+    (r'^doc/$', desc_views.DocView(), {}, 'doc-generic'),
+    (r'^desc/$', desc_views.DescView(), {}, 'desc'),
 
-    (r'^sparql/$', SparqlView(), {}, 'sparql'),
+    (r'^search/$', core_views.SearchView(), {}, 'search'),
+    (r'^citation-network/$', core_views.CitationNetworkView(), {}, 'citation-network'),
 
-    (r'^forbidden/$', ForbiddenView(), {}, 'forbidden'),
+    (r'^journals/$', core_views.JournalListView(), {}, 'journal-list'),
+    (r'^articles/$', core_views.ArticleListView(), {}, 'article-list'),
+    (r'^organizations/$', core_views.OrganizationListView(), {}, 'organization-list'),
+
+    (r'^sparql/$', desc_views.SparqlView(), {}, 'sparql'),
+
+    (r'^forbidden/$', core_views.ForbiddenView(), {}, 'forbidden'),
 
     (r'^pingback/', include('humfrey.pingback.urls')),
 
-    (r'^external-image/$', ResizedImageView(), {}, 'resized-image'),    
+    (r'^external-image/$', images_views.ResizedImageView(), {}, 'resized-image'),
 )
 
-handler500 = ServerErrorView()
+handler500 = core_views.ServerErrorView()
 
 if settings.DEBUG:
     urlpatterns += patterns('',
