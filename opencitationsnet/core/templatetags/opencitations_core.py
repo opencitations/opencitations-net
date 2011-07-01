@@ -4,4 +4,4 @@ register = template.Library()
 
 @register.filter
 def escape_dot(s):
-	return s.replace('"', '\"')
+	return ' '.join(s.split()).replace('"', '\"')
