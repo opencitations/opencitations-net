@@ -11,7 +11,12 @@ from opencitationsnet.core import views as core_views
 urlpatterns = patterns('',
     (r'^$', core_views.IndexView(), {}, 'index'),
     (r'^id/.*$', desc_views.IdView(), {}, 'id'),
+
     (r'^about/$', direct_to_template, {'template': 'about.html'}, 'about'),
+    (r'^contact/$', direct_to_template, {'template': 'contact.html'}, 'contact'),
+
+    (r'^source-code/$', direct_to_template, {'template': 'source-code.html'}, 'source-code'),
+    (r'^source-data/$', direct_to_template, {'template': 'source-data.html'}, 'source-data'),
 
     (r'^doc.+$', desc_views.DocView(), {}, 'doc'),
     (r'^doc/$', desc_views.DocView(), {}, 'doc-generic'),
