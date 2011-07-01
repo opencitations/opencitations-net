@@ -207,3 +207,12 @@ div#graph_container a {
 table.results dt, table.results dl {
   display:inline;
 }
+
+form, table {
+  width:100%;
+}
+
+textarea {
+  width:100%;
+  height:15em;
+}

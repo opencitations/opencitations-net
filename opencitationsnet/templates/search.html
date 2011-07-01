@@ -13,8 +13,16 @@
     <p>Enter an identifier (e.g. ISBN, ISSN, eISSN, DOI, PMID, PMCID) to search for.</p>
     
     <form method="get" action="">
-      <label for="query">Search identifiers:</label>
-      <input id="query" name="query" value="{{ query_term|default_if_none:"" }}"/>
+      <label for="identifier">Search identifiers:</label>
+      <input id="identifier" name="identifier" value="{{ identifier|default_if_none:"" }}"/>
+      <input type="submit" value="Search"/>
+    </form>
+
+    <p>Alternatively, provide a string for which to return exact matches.</p>
+
+    <form method="get" action="">
+      <label for="query">Query:</label>
+      <input id="query" name="query" value="{{ query|default_if_none:"" }}"/>
       <input type="submit" value="Search"/>
     </form>
   </section>
@@ -23,7 +31,7 @@
   <section>
     <h2>Results</h2>
     
-    <table>
+    <table class="results">
       <thead>
         <tr>
           <th>Name</th>
@@ -39,7 +47,7 @@
         </tr>
 {% endfor %}
 {% else %}
-        <tr>
+        <tr class="row-odd">
           <td colspan="2">No results were found.</td>
         </tr>
 {% endif %}

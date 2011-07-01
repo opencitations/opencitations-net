@@ -88,17 +88,18 @@ class SearchView(EndpointView, ResultSetView):
     """
 
     def handle_GET(self, request, context):
-        query_term = request.GET.get('query', '').strip()
+        query_term = (request.GET.get('identifier') or request.GET.get('query', '')).strip()
         if query_term:
-            self.perform_query(context, query_term)
+            self.perform_query(request, context, query_term)
         return self.render(request, context, 'search')
 
-    def perform_query(self, context, query_term):
+    def perform_query(self, request, context, query_term):
         results = self.endpoint.query(self._QUERY % Literal(query_term).n3())
         context.update({
             'results': results,
             'queries': [results.query],
-            'query_term': query_term,
+            'query': request.GET.get('query', ''),
+            'identifier': request.GET.get('identifier', ''),
         })
 
 class JournalListView(CannedQueryView):
