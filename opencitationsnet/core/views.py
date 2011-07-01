@@ -62,7 +62,7 @@ class ServerErrorView(BaseView):
 class CannedQueryView(EndpointView, ResultSetView, RDFView):
     def handle_GET(self, request, context):
         results = self.endpoint.query(self._QUERY)
-        
+
         if isinstance(results, list):
             context['results'] = results
         elif isinstance(results, rdflib.ConjunctiveGraph):
@@ -86,13 +86,13 @@ class SearchView(EndpointView, ResultSetView):
         } .
       } GROUP BY ?thing LIMIT 100
     """
-    
+
     def handle_GET(self, request, context):
         query_term = request.GET.get('query', '').strip()
         if query_term:
             self.perform_query(context, query_term)
         return self.render(request, context, 'search')
-    
+
     def perform_query(self, context, query_term):
         results = self.endpoint.query(self._QUERY % Literal(query_term).n3())
         context.update({
@@ -100,7 +100,6 @@ class SearchView(EndpointView, ResultSetView):
             'queries': [results.query],
             'query_term': query_term,
         })
-        
 
 class JournalListView(CannedQueryView):
     _QUERY = """
@@ -111,7 +110,7 @@ class JournalListView(CannedQueryView):
         OPTIONAL { ?journal prism:eIssn ?eissn }
       } ORDER BY ?title
     """
-    
+
     template_name = 'journal_list'
 
 class ArticleListView(CannedQueryView):
@@ -126,7 +125,7 @@ class ArticleListView(CannedQueryView):
         OPTIONAL { ?article fabio:hasPubMedCentralId ?pmc_ } .
       } GROUP BY ?article LIMIT 200
     """
-    
+
     template_name = 'article_list'
 
 class OrganizationListView(CannedQueryView):
@@ -137,10 +136,16 @@ class OrganizationListView(CannedQueryView):
         OPTIONAL { ?organization v:adr/rdfs:label ?address_ } .
       } GROUP BY ?organization LIMIT 200
     """
-    
+
     template_name = 'organization_list'
 
 class CitationNetworkView(EndpointView, RDFView):
+    _DIRECTIONS = {
+        'citedBy': 'cito:cites',
+        'cites': '^cito:cites',
+        'both': 'cito:cites|^cito:cites'
+    }
+
     _QUERY = """
       CONSTRUCT {
         ?article a ?type ;
@@ -151,7 +156,7 @@ class CitationNetworkView(EndpointView, RDFView):
           dcterms:title ?citedTitle ;
           dcterms:published ?citedPublished .
       } WHERE {
-        { SELECT DISTINCT ?article WHERE { ?article (cito:cites|^cito:cites){,%(depth)d} %(uri)s } } .
+        { SELECT DISTINCT ?article WHERE { ?article (%(direction)s){,%(depth)d} %(uri)s } } .
         ?article a ?type ;
           dcterms:title ?title .
         OPTIONAL { ?article dcterms:published ?published } .
@@ -172,17 +177,22 @@ class CitationNetworkView(EndpointView, RDFView):
             depth = max(0, min(int(request.GET.get('depth')), 3))
         except (TypeError, ValueError):
             depth = 2 
-        
-        query = self._QUERY % {'uri': uri.n3(), 'depth': depth}
+
+        try:
+            direction = self._DIRECTIONS[request.GET['direction']]
+        except KeyError:
+            direction = self._DIRECTIONS['both']
+
+        query = self._QUERY % {'uri': uri.n3(), 'depth': depth, 'direction': direction}
         graph = self.endpoint.query(query)
-        
+
         context.update({
             'graph': graph,
             'queries': [graph.query],
             'subjects': [Resource(s, graph, self.endpoint) for s in set(graph.subjects())],
             'subject': Resource(uri, graph, self.endpoint),
         })
-        
+
         return self.render(request, context, 'citation-network')
 
     _DOT_LAYOUTS = "circo dot fdp neato nop nop1 nop2 osage patchwork sfdp twopi".split()
@@ -196,12 +206,13 @@ class CitationNetworkView(EndpointView, RDFView):
         dict(format='pdf', mimetypes=('application/pdf',), name='PDF', dot_output='pdf'),
         dict(format='svg', mimetypes=('image/svg+xml',), name='SVG', dot_output='svg'),
     ]
-    
+
     def _get_dot_renderer(output):
         def dot_renderer(self, request, context, template_name):
             layout = request.GET.get('layout')
             if layout not in self._DOT_LAYOUTS:
                 layout = 'fdp'
+            context['minimal'] = request.GET.get('minimal') == 'true'
             template = loader.get_template(template_name + '.gv')
             plain_gv = template.render(RequestContext(request, context))
             dot = subprocess.Popen(['dot', '-K'+layout, '-T'+dot_output], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
@@ -209,11 +220,11 @@ class CitationNetworkView(EndpointView, RDFView):
             response = HttpResponse(dot_stdout, mimetype=output['mimetypes'][0])
             response['Content-Disposition'] = 'inline; filename="%s.%s"' % (slugify(context['subject'].dcterms_title)[:32], output['format'])
             return response
-        
+
         dot_output = output.pop('dot_output')
         dot_renderer.__name__ = 'render_%s' % output['format']
         return renderer(**output)(dot_renderer)
-    
+
     for output in _DOT_OUTPUTS:
         locals()['render_%s' % output['format']] = _get_dot_renderer(output)
     del _get_dot_renderer, output
