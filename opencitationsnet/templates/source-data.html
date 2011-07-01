@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Source data{% endblock %}
+
+{% block body %}
+
+<article>
+  <h1>Source data</h1>
+  
+  <p>The source data for this project is available from <a href="/data/">our download area</a>.</p>
+  
+  <section>
+    <h2>Data formats</h2>
+    
+    <p>Data processing happens using BibJSON datasets. The datasets are packed into gzipped tarballs and processed by
+       as a stream by a Python script. Each tarball potentially contains millions of files, making it unwise to extract
+       onto disk.</p>
+    
+    <p>The original source data can be downloaded from the <a href="ftp://ftp.ncbi.nlm.nih.gov/pub/pmc/">National
+       Library of Medicine's FTP site</a>. The files with names of the format <code>articles.<em>X</em>-<em>X</em>.tar.gz</code>
+       contain NLM XML for all articles in the open-access subset, and were used as the basis for the data here. For more information,
+       see <a href="ftp://ftp.ncbi.nlm.nih.gov/pub/pmc/readme.txt">their README</a>.</p>
+       
+    <p>We provide our data at the following stages of processing:</p>
+    
+    <dl>
+      <dt>Raw BibJSON (<code>articles-raw.bibjson.tar.gz</code>)</dt>
+      <dd>The article data after a simple conversion from NLM XML.</dd>
+      <dt>Sanitized BibJSON (<code>articles-sanitized.tar.gz</code>)</dt>
+      <dd>At this stage the data has been augmented with bibliographic data from the Entrez API and some errors corrected.</dd>
+      <dt>Unified BibJSON (<code>articles-unified.bibjson.tar.gz</code>)</dt>
+      <dd>Records which we believe represent the same entity have been grouped into BibJSON datasets.</dd>
+      <dt>Final N-Quads RDF (<code>articles.nq.gz</code>)</dt>
+      <dd>Final RDF serialized as N-Quads and gzipped.</dd>
+    </dt>
+  </section>
+
+  <section>
+    <h2>Sample data</h2>
+    
+    <p>This website contains roughly a tenth of the data available from the ope-access subset of PubMed Central. Specifically, it contains data contained in open-access articles from the following journals:</p>
+    
+    <ul>
+      <li>BMC Bioinformatics</li>
+      <li>BMC Infectious Diseases</li>
+      <li>BMC International Health and Human Rights</li>
+      <li>BMC Medical Research Methodologies</li>
+      <li>Journal of Biomedical Semantics</li>
+      <li>Nucleic Acids Research</li>
+      <li>PLoS Computational Biology</li>
+      <li>PLoS Medicine</li>
+      <li>PLoS Neglected Tropical Diseases</li>
+    </ul>
+    
+    <p>Data files:</p>
+    
+    <ul>
+      <li><a href="/data/sample/articles-raw.bibjson.tar.gz">Raw BibJSON</a></li>
+      <li><a href="/data/sample/articles-sanitized.bibjson.tar.gz">Sanitized BibJSON</a></li>
+      <li><a href="/data/sample/articles-unified.bibjson.tar.gz">Unified BibJSON</a></li>
+      <li><a href="/data/sample/articles.nq.gz">Final N-Quads RDF</a></li>
+    </ul>
+  </section>
+
+  
+  <section>
+    <h2>Complete dataset</h2>
+    
+    <p>Data files:</p>
+
+    <ul>
+      <li><a href="/data/complete/articles-raw.bibjson.tar.gz">Raw BibJSON</a></li>
+      <li><a href="/data/complete/articles-sanitized.bibjson.tar.gz">Sanitized BibJSON</a></li>
+      <li><a href="/data/complete/articles-unified.bibjson.tar.gz">Unified BibJSON</a></li>
+      <li><a href="/data/complete/articles.nq.gz">Final N-Quads RDF</a></li>
+    </ul>
+  </section>
+  
+</article>
+
+{% endblock %}

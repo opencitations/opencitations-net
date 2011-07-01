@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Source code{% endblock %}
+
+{% block body %}
+
+<article>
+  <h1>Source code</h1>
+  
+  <p>The source code for this project is available <a href="https://github.com/opencitations/">on GitHub</a> under the MIT license.</p>
+  
+  <section>
+    <h2>Repositories</h2>
+    
+    <p>Source code is maintained in two repositories:</p>
+    
+    <dl>
+      <dt><a href="https://github.com/opencitations/PubMed-OA-network-analysis-scripts">Data processing</a></dt>
+      <dd>Includes scripts for transforming NLM XML into BibJSON and RDF.</dd>
+      <dt><a href="https://github.com/opencitations/opencitations-net">OpenCitations.net</a></dt>
+      <dd>The source code for this website.</dd>
+    </dl>
+  </section>
+</article>
+
+{% endblock %}
