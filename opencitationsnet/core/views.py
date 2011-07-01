@@ -105,9 +105,9 @@ class SearchView(EndpointView, ResultSetView):
 class JournalListView(CannedQueryView):
     _QUERY = """
       SELECT ?journal ?title ?issn ?eissn WHERE {
-        ?journal a fabio:Journal ;
-          dcterms:title ?title ;
-          prism:issn ?issn .
+        ?journal prism:issn ?issn ;
+          a fabio:Journal ;
+          dcterms:title ?title .
         OPTIONAL { ?journal prism:eIssn ?eissn }
       } ORDER BY ?title
     """
