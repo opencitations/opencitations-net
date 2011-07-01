@@ -1,17 +1,23 @@
-{% extends "base.html" %}
+{% extends "base.html" %}{% load hosts %}
 
 {% block title %}About{% endblock %}
 
 {% block body %}
 <article>
+
   <h1>About the JISC OpenCitations Project</h1>
 
-  <p>
-    The Open Citations Project is global in scope, designed to change the face
-    of scientific publishing.
-  </p>
-
+  <section>
+    <h2>Project scope and purpose</h2>
   
+    <p>
+      The Open Citations Project is global in scope, designed to change the
+      face of scientific publishing and scholarly communication. Specifically,
+      it aims to make it possible to publish bibliographic and citation
+      information in RDF and to make citation links as easy to traverse as Web
+      links.
+    </p>
+{% comment %}
   <aside>
     <p>
       Note: In this context, a bibliographic citation is a reference within a
@@ -23,41 +29,58 @@
       citation.
     </p>
   </aside>
+{% endcomment %}
+  </section>
 
-  <p>
-    It aims to make bibliographic citation links as easy to use as Web links.
-    Its goals are three-fold:
-  </p>
+  <section>
+    <h2>Project aims</h2>
 
-  <ul>
-    <li>
-      To establish <a href="http://opencitations.net">OpenCitations.net</a>,
-      a public RDF triplestore for biomedical literature citations.
-    </li>
-    <li>
-      To harvest the reference lists from many current and recent open access
-      journal articles, and to convert these datasets into RDF, starting with
-      those in UK Pubmed Central, those published by the Public Library of
-      Science and Biomed Central, those from other publishers willing for
-      CrossRef to release their data, and articles from other Open Access
-      repositories like EPrints.
-    </li>
-    <li>To publish these citation datasets as Open Linked Data on the
-      <a href="http://www.talis.com/platform/cc/">Talis Connected Commons
-      Platform</a> under an open data license in both human- and
-      computer-accessible formats.
-    </li>
-  </ul>
+    <p>To achieve this goal, we have had four primary aims:</p>
 
-  <p>
-    As such, <strong>the Open Citation Project seeks to promote citation
-    datasets as first class information objects</strong>. The reference list
-    from each article processed will be published as an individual named
-    graph, with its own individual <a href="http://www.doi.org/">Digital
-    Object Identifier (DOI)</a> assigned by the relevant publisher via
-    CrossRef or by the British Library on behalf of the
-    <a href="http://datacite.org">DataCite Project.</a>
-  </p>
+    <ul>
+      <li>To create a <em>semantic infrastructure</em> that makes possible the
+          description of citations, references and bibliographic entities in
+          RDF, since we found existing ontologies inadequate for our purpose.</li>
+
+      <li>To extend that semantic infrastructure to handle <em>data citations
+          and data entities</em>, as well as bibliographic citations and
+          bibliographic entities, mindful of Philip Bourne's prediction that
+          soon there will be no meaningful difference between a journal article
+          and a database entry.</li>
+
+      <li>To <em>provide exemplars</em> of how these ontologies can be applied
+          to real-world data, by <em>creating mappings</em> from existing
+          encodings to RDF, and by <em>creating RDF metadata</em> relating to
+          bibliographic and data entities and their citations.</li>
+      <li>To <em>convert the reference lists within all the PMC Open Access
+          subset articles to RDF</em>, and to publish them as open linked data
+          that third parties can use in novel ways.</li>
+    </ul>
+  </section>
+
+    <section>
+      <h2>Principle deliverables and outputs</h2>
+
+      <ul>
+        <li>The <a href="http://purl.org/spar/">SPAR</a> (Semantic Publishing and Referencing) Ontologies.</li>
+        <li>Mappings of various existing metadata schemes to RDF using SPAR.</li>
+        <li><a href="http://www.essepuntato.it/graffoo">Graffoo</a> and <a href="http://lode.sourceforge.net/">LODE</a>, two novel tools for ontology visualization and documentation.</li>
+        <li>The <a href="http://opencitations.wordpress.com/">Open Citations Blog</a> in which activities and outputs are described.</li>
+        <li>The <em>Open Citations Corpus</em> of bibliographic citation data encoded in RDF and published as Open Linked Data.</li>
+        <li>The <a href="{% host_url index on data %}">OpenCitations.net</a> web site, to provide user access to the Open Citations Corpus.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Primary beneficiaries</h2>
+
+      <ul>
+        <li>Scholars worldwide, particularly in the biomedical sciences, by providing better access to bibliographic and citation data.</li>
+        <li>Academic publishers and repository managers, by providing a semantic infrastructure and tools to enable their outputs and holdings to join the semantic web of open linked data.</li>
+      </ul>
+    </section>
+
+
 </article>
 
 {% endblock %}
