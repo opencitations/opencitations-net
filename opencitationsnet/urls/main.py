@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
-from django.views.generic.simple import redirect_to
+from django.views.generic.simple import redirect_to, direct_to_template
 
 from humfrey.desc import views as desc_views
 from humfrey.images import views as images_views
@@ -11,6 +11,7 @@ from opencitationsnet.core import views as core_views
 urlpatterns = patterns('',
     (r'^$', core_views.IndexView(), {}, 'index'),
     (r'^id/.*$', desc_views.IdView(), {}, 'id'),
+    (r'^about/$', direct_to_template, {'template': 'about.html'}, 'about'),
 
     (r'^doc.+$', desc_views.DocView(), {}, 'doc'),
     (r'^doc/$', desc_views.DocView(), {}, 'doc-generic'),

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block body %}
+<article>
+  <h1>About the JISC OpenCitations Project</h1>
+
+  <p>
+    The Open Citations Project is global in scope, designed to change the face
+    of scientific publishing.
+  </p>
+
+  
+  <aside>
+    <p>
+      Note: In this context, a bibliographic citation is a reference within a
+      particular citing work to another publication termed the cited work.
+      This use of the word ‘citation’ should be clearly distinguished from the
+      common related use of this word to indicate the cited work itself.
+      Within this application, ‘cite’ and &#8216;citation&#8217; denote the
+      performative act of citation itself, not the target document of that
+      citation.
+    </p>
+  </aside>
+
+  <p>
+    It aims to make bibliographic citation links as easy to use as Web links.
+    Its goals are three-fold:
+  </p>
+
+  <ul>
+    <li>
+      To establish <a href="http://opencitations.net">OpenCitations.net</a>,
+      a public RDF triplestore for biomedical literature citations.
+    </li>
+    <li>
+      To harvest the reference lists from many current and recent open access
+      journal articles, and to convert these datasets into RDF, starting with
+      those in UK Pubmed Central, those published by the Public Library of
+      Science and Biomed Central, those from other publishers willing for
+      CrossRef to release their data, and articles from other Open Access
+      repositories like EPrints.
+    </li>
+    <li>To publish these citation datasets as Open Linked Data on the
+      <a href="http://www.talis.com/platform/cc/">Talis Connected Commons
+      Platform</a> under an open data license in both human- and
+      computer-accessible formats.
+    </li>
+  </ul>
+
+  <p>
+    As such, <strong>the Open Citation Project seeks to promote citation
+    datasets as first class information objects</strong>. The reference list
+    from each article processed will be published as an individual named
+    graph, with its own individual <a href="http://www.doi.org/">Digital
+    Object Identifier (DOI)</a> assigned by the relevant publisher via
+    CrossRef or by the British Library on behalf of the
+    <a href="http://datacite.org">DataCite Project.</a>
+  </p>
+</article>
+
+{% endblock %}
