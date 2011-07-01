@@ -162,9 +162,6 @@ class CitationNetworkView(EndpointView, RDFView):
         OPTIONAL { ?article dcterms:published ?published } .
         OPTIONAL {
           ?article cito:cites ?cited .
-            ?cited a ?citedType ;
-            dcterms:title ?citedTitle .
-          OPTIONAL { ?cited dcterms:published ?citedPublished } .
         } .
       }
     """
@@ -186,11 +183,15 @@ class CitationNetworkView(EndpointView, RDFView):
         query = self._QUERY % {'uri': uri.n3(), 'depth': depth, 'direction': direction}
         graph = self.endpoint.query(query)
 
+        subjects = [Resource(s, graph, self.endpoint) for s in set(graph.subjects(NS.rdf.type))]
+        hexhashes = set(s.hexhash for s in subjects)
+
         context.update({
             'graph': graph,
             'queries': [graph.query],
-            'subjects': [Resource(s, graph, self.endpoint) for s in set(graph.subjects())],
+            'subjects': subjects,
             'subject': Resource(uri, graph, self.endpoint),
+            'hexhashes': hexhashes,
         })
 
         return self.render(request, context, 'citation-network')
