@@ -114,6 +114,21 @@ table.article-list td.identifiers dd:after {
     content: '\A';
 }
 
+aside {
+    float:right;
+    width:300px;
+    border:1px solid #4B332F;
+    margin-left:1em;
+    margin-bottom:1em;
+    background-color:#fff;
+    padding:0.5em;
+    font-size:80%;
+}
+
+aside p {
+    margin:0;
+}
+
 aside.toolbox, aside.sidebar {
     float: right;
     width:200px;
