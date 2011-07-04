@@ -28,9 +28,21 @@
     {% block body %}{% endblock %}
 
     <footer>
-      A <a href="http://www.jisc.ac.uk/">JISC</a> project at
-      <a href="http://ibrg.zoo.ox.ac.uk/">IBRG</a>, <a href="http://www.zoo.ox.ac.uk/">Department of Zoology</a>,
-      <a href="http://www.ox.ac.uk/">University of Oxford</a>
+      <div class="logos">
+        <img class="logo logo-jisc" src="{{ MEDIA_URL }}logos/jisc.gif" alt=""/>
+        <img class="logo logo-ibrg" src="{{ MEDIA_URL }}logos/ibrg.png" alt=""/>
+        <img class="logo logo-oxford" src="{{ MEDIA_URL }}logos/oxford.gif" alt=""/>
+      </div>
+      <p>
+        This is a project of <a href="http://ibrg.zoo.ox.ac.uk/">IBRG</a>, and was undertaken
+        at the <a href="http://www.zoo.ox.ac.uk/">Department of Zoology</a>,
+        <a href="http://www.ox.ac.uk/">University of Oxford</a>.
+      </p>
+      <p>
+        The project was funded by the <a href="http://www.jisc.ac.uk/">JISC</a>'s
+        <a href="http://www.jisc.ac.uk/whatwedo/programmes/inf11/jiscexpo.aspx">jiscEXPO</a> strand.
+      </p>
+      <div style="clear:both"> </div>
     </footer>
   </div>{% include "analytics/include.html" %}</body>
 </html>
