@@ -60,3 +60,7 @@ SERVED_DOMAINS = (
     'opencitations.net',
 )
 
+DOC_RDF_PROCESSORS += (
+    'opencitationsnet.core.rdf_processors.license_statement',
+)
+
