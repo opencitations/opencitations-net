@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     (r'^$', core_views.IndexView(), {}, 'index'),
     (r'^id/.*$', desc_views.IdView(), {}, 'id'),
     (r'^about/$', direct_to_template, {'template': 'about.html'}, 'about'),
+    (r'^license/$', direct_to_template, {'template': 'license.html'}, 'license'),
 
     (r'^doc.+$', desc_views.DocView(), {}, 'doc'),
     (r'^doc/$', desc_views.DocView(), {}, 'doc-generic'),
