@@ -30,8 +30,18 @@ nav ul {
 
 footer {
   background-color: #fff;
-  padding:5px;
-  text-align: center;
+  padding:15px 15px 5px 15px;
+  font-size:10pt;
+}
+
+footer p {
+  margin-top:0;
+  width:400px;
+  margin-bottom:5px;
+}
+
+footer p a {
+  white-space:nowrap;
 }
 
 nav li {
@@ -48,8 +58,10 @@ div.container {
   margin-left: auto;
   margin-right: auto;
   border:2px solid #fff;
+  border-bottom:0;
   background-color: #EADECE;
 }
+
 
 article {
   margin:1em;
@@ -68,6 +80,7 @@ article.blog-entry {
   border:1px solid #888;
   margin:5px;
   padding:10px;
+  font-size:10pt;
 }
 
 p.blog-entry-date {
@@ -77,7 +90,6 @@ p.blog-entry-date {
 
 article.blog-entry p {
   margin:0.2em;
-  font-size:10pt;
 }
 
 article.blog-entry h3 {
@@ -215,4 +227,21 @@ form, table {
 textarea {
   width:100%;
   height:15em;
+}
+
+div.logos {
+  float:right;
+}
+
+img.logo {
+  margin-right:10px;
+}
+
+img.logo-ibrg, img.logo-oxford {
+  position:relative;
+  top:-10px;
+}
+
+img.logo-oxford {
+  margin-right:0;
 }
