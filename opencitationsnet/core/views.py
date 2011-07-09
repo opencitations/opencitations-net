@@ -82,7 +82,7 @@ class SearchView(EndpointView, ResultSetView):
       SELECT ?thing (SAMPLE(?label_) as ?label) (SAMPLE(?type_) as ?type) WHERE {
         ?thing ?p %s ;
           a ?type_ .
-        FILTER (?p in (prism:issn, prism:eIssn, prism:isbn, prism:doi, fabio:hasPubMedId, fabio:hasPubMedCentralId, dcterms:identifier, rdfs:label, skos:prefLabel)) .
+        FILTER (?p in (prism:issn, prism:eIssn, prism:isbn, prism:doi, fabio:hasPubMedId, fabio:hasPubMedCentralId, dcterms:identifier, rdfs:label, skos:prefLabel, dcterms:title, foaf:name)) .
         OPTIONAL {
           ?thing ?label_predicate ?label_ .
           FILTER (?label_predicate in (skos:prefLabel, rdfs:label, dcterms:title, foaf:name, dcterms:identifier, rdfs:label))
