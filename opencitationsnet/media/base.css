@@ -81,6 +81,11 @@ article.blog-entry {
   margin:5px;
   padding:10px;
   font-size:10pt;
+  overflow: hidden;
+}
+
+p.blog-entry-more {
+  text-align: right;
 }
 
 p.blog-entry-date {
