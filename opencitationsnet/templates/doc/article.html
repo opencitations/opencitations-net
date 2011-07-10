@@ -71,6 +71,7 @@
           <option value="citedBy">articles that cite this paper</option>
           <option value="cites">articles cited by this paper</option>
           <option value="both">both</option>
+          <option value="both">all (mixed direction paths)</option>
         </select></td>
       </tr>
       <tr>
@@ -78,6 +79,14 @@
         <td><select name="minimal">
           <option value="">full</option>
           <option value="true">minimal</option>
+        </select></td>
+      </tr>
+      <tr>
+        <td>Depth:</td>
+        <td><select name="depth">
+          <option value="1">1</option>
+          <option value="2" selected="selected">2</option>
+          <option value="3">3</option>
         </select></td>
       </tr>
       <tr>
@@ -91,7 +100,7 @@
           <option value="nop1">nop1</option>
           <option value="nop2">nop2</option>
           <option value="osage">osage</option>
-          <option value="patchwork">patchwork</option>
+{#          <option value="patchwork">patchwork</option> #}
           <option value="sfdp">sfdp</option>
           <option value="twopi">twopi</option>
         </select></td>
