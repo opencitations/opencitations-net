@@ -38,7 +38,10 @@
   </p>
     
   {% if subject.abstract %}
-    <p class="article-abstract">{{ subject.abstract.rdf_value }}</p>
+    <section>
+      <h2>Abstract</h2>
+      <p class="article-abstract">{{ subject.abstract.rdf_value }}</p>
+    </section>
   {% endif %}
 {% endblock %}
 
