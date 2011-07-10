@@ -61,7 +61,7 @@
 <h2>Citation network</h2>
 
 <p style="text-align:center;">
-<img src="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&amp;format=png&amp;direction=cites&amp;minimal=true&amp;layout=dot" alt=""/>
+<img src="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&amp;format=png&amp;direction=both&amp;minimal=true&amp;layout=dot" alt=""/>
 </p>
 
 <form method="get" action="{% host_url citation-network on data %}">
