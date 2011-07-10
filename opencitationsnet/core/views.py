@@ -155,9 +155,10 @@ class OrganizationListView(CannedQueryView):
 
 class CitationNetworkView(EndpointView, RDFView):
     _DIRECTIONS = {
-        'citedBy': 'cito:cites',
-        'cites': '^cito:cites',
-        'both': 'cito:cites|^cito:cites'
+        'citedBy': 'cito:cites{,%(depth)d}',
+        'cites': '^cito:cites{,%(depth)d}',
+        'all': '(cito:cites|^cito:cites){,%(depth)d}',
+        'both': 'cito:cites{,%(depth)d}|(^cito:cites){,%(depth)d}',
     }
 
     _QUERY = """
@@ -170,7 +171,7 @@ class CitationNetworkView(EndpointView, RDFView):
           dcterms:title ?citedTitle ;
           dcterms:published ?citedPublished .
       } WHERE {
-        { SELECT DISTINCT ?article WHERE { ?article (%(direction)s){,%(depth)d} %(uri)s } } .
+        { SELECT DISTINCT ?article WHERE { ?article %(direction)s %(uri)s } } .
         ?article a ?type ;
           dcterms:title ?title .
         OPTIONAL { ?article dcterms:published ?published } .
@@ -193,8 +194,9 @@ class CitationNetworkView(EndpointView, RDFView):
             direction = self._DIRECTIONS[request.GET['direction']]
         except KeyError:
             direction = self._DIRECTIONS['both']
+        direction = direction  % {'depth': depth}
 
-        query = self._QUERY % {'uri': uri.n3(), 'depth': depth, 'direction': direction}
+        query = self._QUERY % {'uri': uri.n3(), 'direction': direction}
         graph = self.endpoint.query(query)
 
         subjects = [Resource(s, graph, self.endpoint) for s in set(graph.subjects(NS.rdf.type))]
