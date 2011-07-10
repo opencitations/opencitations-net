@@ -11,16 +11,13 @@ MANAGERS = ADMINS
 
 INSTALLED_APPS += (
     'opencitationsnet.core',
-    'django_hosts',
 )
 
 MEDIA_URL = '//opencitations.net/site-media/'
 
-MIDDLEWARE_CLASSES = ('django_hosts.middleware.HostsMiddleware',) + MIDDLEWARE_CLASSES
-
 ROOT_URLCONF = 'opencitationsnet.urls.empty'
 ROOT_HOSTCONF = 'opencitationsnet.hosts'
-DEFAULT_HOST = 'data'
+DEFAULT_HOST = 'empty'
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 
 ADDITIONAL_NAMESPACES = {
@@ -64,3 +61,6 @@ DOC_RDF_PROCESSORS += (
     'opencitationsnet.core.rdf_processors.license_statement',
 )
 
+CACHE_TIMES.update({
+    'page': 2<<30, # Donkey's years
+})
