@@ -9,22 +9,34 @@
 {% block body %}
 <article>
 
-    
   <h1>Home</h1>
-  
-  <p>Open Citations is a public RDF triplestore for biomedical literature
-     citations. Our aim is to harvest the reference lists from many current
-     and recent open access journal articles, and to convert these datasets
-     into RDF, starting with those in UK Pubmed Central.</p>
-  
-  <p>The project was funded by the <a href="http://www.jisc.ac.uk/">JISC</a>'s
-     <a href="http://www.jisc.ac.uk/whatwedo/programmes/inf11/jiscexpo.aspx">jiscEXPO
-     strand</a>.</p>
-     
-  <p>This website is an exemplar, allowing access to roughly one tenth of the
-     data in the PubMed Central Open Access corpus. The entire dataset can be
+
+  <p>Open Citations is a database of biomedical literature citations, harvested
+     from the reference lists of all open access articles in
+     <a href="http://www.ncbi.nlm.nih.gov/pmc/">PubMed Central</a> that
+     reference ~20% of all PubMed Central papers (approx. 3.4 million papers),
+     including all the highly cited papers in every biomedical field.  All the
+     data are freely available for download and reuse.</p>
+
+  <p>This web site allows you to browse these bibliographic records and
+     citations, to select an individual article, and to visualize its citation
+     network in a variety of displays.  Details of each selected reference, and
+     the data and diagrams for its citation network, may be downloaded in a
+     variety of formats, while the entire Open Citations Corpus can be
      downloaded from our <a href="{% host_url source-data on data %}">source
-     data</a> page.</p>
+     data</a> page in several formats including RDF and BibJSON.</p>
+
+  <p>Our aim for the future is to work with publishers to make available the
+     reference lists from many more current and recent journal articles,
+     starting with the biomedical literature, and to make the citations
+     contained within them available as Open Linked Data in the manner
+     demonstrated by the existing exemplar data available here.</p>
+
+  <p>The Open Citations Project was funded by the
+     <a href="http://www.jisc.ac.uk/">JISC</a>'s
+     <a href="http://www.jisc.ac.uk/whatwedo/programmes/inf11/jiscexpo.aspx">jiscEXPO
+     strand</a>.  Further information is given on the
+     <a href="http://opencitations.wordpress.com/">Open Citations Blog</a>.</p>
 
 {% if feed %}
   <section class="blog-feed">
