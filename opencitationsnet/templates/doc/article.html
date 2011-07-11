@@ -1,7 +1,8 @@
 {% extends "doc/base.html" %}{% load humfrey_desc %}{% load hosts %}
 
-{% block extrahead %}{{ block.super }}{% comment %}
+{% block extrahead %}{{ block.super }}
 <script type="application/javascript" src="http://www.ryandesign.com/canviz/canviz.js"></script>
+<script type="application/javascript" src="http://www.ryandesign.com/canviz/x11colors.js"></script>
 <script type="application/javascript" src="http://www.ryandesign.com/canviz/path/path.js"></script>
 <script type="application/javascript">
   var canviz = null;
@@ -10,13 +11,12 @@
     canviz.setScale("1");
     canviz.setImagePath('graphs/images/');
     //canviz.load("http:{{ MEDIA_URL }}test.gv");
-    canviz.load("{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&format=xdot");
-    
-    //canviz.draw();
+    canviz.load("{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&format=xdot&layout=dot&minimal=true&direction=citedBy");
+    canviz.draw();
   });
   
 </script>
-{% endcomment %}{% endblock %}
+{% endblock %}
 
 {% block doc_intro %}
   <h1 class="article-title">
@@ -43,6 +43,18 @@
       <p class="article-abstract">{{ subject.abstract.rdf_value }}</p>
     </section>
   {% endif %}
+
+<section>
+<h2>Citation network</h2>
+<div id="graph_container_container"><div id="graph_container"> </div></div><div id="debug_output""></div>
+
+<!--
+<p style="text-align:center;">
+<img src="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&amp;format=png&amp;direction=both&amp;minimal=true&amp;layout=dot" alt=""/>
+</p>
+-->
+
+</section>
 {% endblock %}
 
 
@@ -58,12 +70,6 @@
 {% endblock %}
 
 {% block doc_detail %}
-<h2>Citation network</h2>
-
-<p style="text-align:center;">
-<img src="{% host_url citation-network on data %}?uri={{ subject.uri|urlencode }}&amp;format=png&amp;direction=both&amp;minimal=true&amp;layout=dot" alt=""/>
-</p>
-
 <form method="get" action="{% host_url citation-network on data %}">
   <input type="hidden" name="uri" value="{{ subject.uri }}"/>
   <table>

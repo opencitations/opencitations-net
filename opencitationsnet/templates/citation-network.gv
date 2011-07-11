@@ -2,7 +2,7 @@
 digraph default {
   graph [outputOrder=edgesfirst, scale={% if minimal %}2{% else %}1{% endif %}];
   node [style=filled, label="\N", shape={% if minimal %}circle{% else %}box{% endif %}, fontsize=9, fillcolor=white, margin="{% if minimal %}0,0{% else %}0.04,0.01{% endif %}"];
-  edge [color=darkgray, arrowType="empty"; arrowsize="{% if minimal %}0.5{% else %}1{% endif %}];{% for article in subjects %}
-  a_{{ article.hexhash }} [{% if minimal %}fizedsize=true, width=0.05, height=0.05, {% endif %}label="{% if  minimal %} {% else %}{{ article.label|truncatewords:5|escape_dot|safe }}{% endif %}", tooltip="{{ article.label|escape_dot|safe }}" href="{{ article.doc_url }}"{% if article.hexhash == subject.hexhash %}, fillcolor=red, fontcolor=black{% endif %}{% if article.dcterms_published %}, date="{{ article.dcterms_published }}"{% endif %}];{% for cited in article.all.cito_cites %}{% if cited.hexhash in hexhashes %}
+  edge [color=darkgray, arrowType="empty"; arrowsize={% if minimal %}0.5{% else %}1{% endif %}];{% for article in subjects %}
+  a_{{ article.hexhash }} [{% if minimal %}fizedsize=true, width=0.05, height=0.05, {% endif %}label="{% if  minimal %}•{% else %}{{ article.label|truncatewords:5|escape_dot|safe }}{% endif %}", tooltip="{{ article.label|escape_dot|safe }}" href="{{ article.doc_url }}"{% if article.hexhash == subject.hexhash %}, fillcolor=red, fontcolor=black{% endif %}{% if article.dcterms_published %}, date="{{ article.dcterms_published }}"{% endif %}];{% for cited in article.all.cito_cites %}{% if cited.hexhash in hexhashes %}
   a_{{ article.hexhash }} -> a_{{ cited.hexhash }} ;{% endif %}{% endfor %}{% endfor %}
 }
