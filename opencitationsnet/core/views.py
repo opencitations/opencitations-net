@@ -59,7 +59,7 @@ class ServerErrorView(BaseView):
         context['status_code'] = 500
         return self.render(request, context, '500')
 
-class CannedQueryView(EndpointView, ResultSetView, RDFView):
+class CannedQueryView(ResultSetView, RDFView):
     subject_type = None
     
     def handle_GET(self, request, context):
@@ -77,7 +77,7 @@ class CannedQueryView(EndpointView, ResultSetView, RDFView):
 
         return self.render(request, context, self.template_name)      
 
-class SearchView(EndpointView, ResultSetView):
+class SearchView(ResultSetView):
     _QUERY = """
       SELECT ?thing (SAMPLE(?label_) as ?label) (SAMPLE(?type_) as ?type) WHERE {
         ?thing ?p %s ;
@@ -153,7 +153,7 @@ class OrganizationListView(CannedQueryView):
 
     template_name = 'organization_list'
 
-class CitationNetworkView(EndpointView, RDFView):
+class CitationNetworkView(RDFView):
     _DIRECTIONS = {
         'citedBy': 'cito:cites{,%(depth)d}',
         'cites': '^cito:cites{,%(depth)d}',
