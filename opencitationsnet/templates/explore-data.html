@@ -2,20 +2,54 @@
 
 {% block subnav %}
 <nav>
-<ul>
-        <li><a href="{% host_url journal-list on data %}">Journals</a></li>
-        <li><a href="{% host_url article-list on data %}">Articles</a></li>
-        <li><a href="{% host_url search on data %}">Search</a></li>
-        <li><a href="{% host_url sparql on data %}">SPARQL</a></li>
-        <li><a href="{% host_url source-data on data %}">Source data</a></li>
-</ul>
+  <ul>
+    <li><a href="{% host_url journal-list on data %}">Journals</a></li>
+    <li><a href="{% host_url article-list on data %}">Articles</a></li>
+    <li><a href="{% host_url search on data %}">Search</a></li>
+    <li><a href="{% host_url sparql on data %}">SPARQL</a></li>
+    <li><a href="{% host_url source-data on data %}">Source data</a></li>
+  </ul>
 </nav>
 {% endblock %}
 
 {% block body %}
 <article>
   <h1>Explore the data</h1>
+
+  <p>JISC Open Citations allows interaction with	 its dataset in several ways:
   
-  <p>Use the links above to explore the data.</p>
+  </p>
+
+
+<a class="blockLink" href="{% host_url journal-list on data %}">
+<span class="linkTitle">Journals</span>
+
+<span class="linkSummary">Browse all journals referenced within the PubMed Central open-access subset.</span>
+</a>
+
+
+<a class="blockLink" href="{% host_url article-list on data %}">
+<span class="linkTitle">Articles</span>
+<span class="linkSummary">Browse a selection of articles contained within or referenced by the PubMed Central open-access subset.</span>
+</a>
+
+
+<a class="blockLink" href="{% host_url search on data %}">
+<span class="linkTitle">Search</span>
+<span class="linkSummary">Search the collection by identifier (ISBN, DOI, ISSN, etc.) or word or phrase.</span>
+</a>
+
+
+<a class="blockLink" href="{% host_url sparql on data %}">
+<span class="linkTitle">SPARQL query</span>
+<span class="linkSummary">Query the dataset using SPARQL queries.</span>
+</a>
+
+
+<a class="blockLink" href="{% host_url source-data on data %}">
+<span class="linkTitle">Source data</span>
+<span class="linkSummary">Download the full dataset as N-Quads or BibJSON files to manipulate off-line or load into your own system.</span>
+</a>
+  
 </article>
 {% endblock %}

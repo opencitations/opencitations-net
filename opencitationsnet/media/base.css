@@ -50,6 +50,8 @@ footer {
   background-color: #fff;
   padding:15px 15px 5px 15px;
   font-size:10pt;
+  clear: both;
+  margin-top: 10px;
 }
 
 footer p {
@@ -87,6 +89,7 @@ div.container {
 
 article {
   margin:1em;
+  
 }
 
 
@@ -96,7 +99,8 @@ section.blog-feed h2 {
   /*border-bottom:1px solid #888;*/
 }
 
-article.blog-entry {
+article.blog-entry,
+a.blockLink {
   width:272px;
   float:left;
   border:1px solid #888;
@@ -126,7 +130,8 @@ article.blog-entry p {
   
 }
 
-article.blog-entry h3 {
+article.blog-entry h3,
+a.blockLink span.linkTitle {
   font-size:12pt;
   font-weight: bold;
   margin-bottom:10px;
@@ -285,4 +290,17 @@ img.logo-ibrg, img.logo-oxford {
 
 img.logo-oxford {
   margin-right:0;
+}
+
+a.blockLink
+{
+	display: block;
+	width: 167px;
+	height:14em;
+}
+a.blockLink span
+{
+	display: block;
+	padding: 5px;
+	
 }
