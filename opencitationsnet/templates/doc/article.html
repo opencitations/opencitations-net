@@ -75,8 +75,8 @@
   <table>
     <tbody>
       <tr>
-        <td>Direction:</td>
-        <td><select name="direction">
+        <td><label for="network-direction">Direction:</label></td>
+        <td><select name="direction" id="network-direction">
           <option value="citedBy">articles that cite this paper</option>
           <option value="cites">articles cited by this paper</option>
           <option value="both">both</option>
@@ -84,23 +84,23 @@
         </select></td>
       </tr>
       <tr>
-        <td>Detail:</td>
-        <td><select name="minimal">
+        <td><label for="network-detail">Detail:</label></td>
+        <td><select name="minimal" id="network-minimal">
           <option value="">full</option>
           <option value="true">minimal</option>
         </select></td>
       </tr>
       <tr>
-        <td>Depth:</td>
-        <td><select name="depth">
+        <td><label for="network-depth">Depth:</label></td>
+        <td><select name="depth" id="network-depth">
           <option value="1">1</option>
           <option value="2" selected="selected">2</option>
           <option value="3">3</option>
         </select></td>
       </tr>
       <tr>
-        <td>Layout algorithm:</td>
-        <td><select name="layout">
+        <td><label for="network-layout">Layout algorithm:</label></td>
+        <td><select name="layout" id="network-layout">
           <option value="fdp">fdp</option>
           <option value="circo">circo</option>
           <option value="dot">dot</option>
@@ -115,8 +115,8 @@
         </select></td>
       </tr>
       <tr>
-        <td>Output format:</td>
-        <td><select name="format">
+        <td><label for="network-format">Output format:</label></td>
+        <td><select name="format" id="network-format">
           <option value="html">HTML</option>
           <option value="png">PNG</option>
           <option value="pdf">PDF</option>

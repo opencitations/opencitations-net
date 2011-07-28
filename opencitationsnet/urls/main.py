@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     (r'^id/.*$', desc_views.IdView(), {}, 'id'),
 
     (r'^about/$', direct_to_template, {'template': 'about.html'}, 'about'),
+    (r'^explore-the-data/$', direct_to_template, {'template': 'explore-data.html'}, 'explore-data'),
     (r'^contact/$', direct_to_template, {'template': 'contact.html'}, 'contact'),
     (r'^source-code/$', direct_to_template, {'template': 'source-code.html'}, 'source-code'),
     (r'^source-data/$', direct_to_template, {'template': 'source-data.html'}, 'source-data'),

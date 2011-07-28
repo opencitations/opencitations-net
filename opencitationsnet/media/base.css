@@ -28,6 +28,20 @@ nav ul {
   padding:5px;
 }
 
+nav nav ul {
+  background-color: #4B332F;
+  font-size:10pt;
+}
+
+nav nav ul a, nav nav ul a:hover {
+  color: #ffffff;
+  font-weight: normal;
+}
+
+nav ul a:focus {
+  text-decoration: underline;
+}
+
 footer {
   background-color: #fff;
   padding:15px 15px 5px 15px;
@@ -40,6 +54,10 @@ footer p {
   margin-bottom:5px;
 }
 
+p a {
+  text-decoration: underline;
+}
+
 footer p a {
   white-space:nowrap;
 }
@@ -49,8 +67,8 @@ nav li {
 }
 
 nav a {
-  padding:5px;
-  
+  padding:10px;
+  font-weight: bold;
 }
 
 div.container {
@@ -79,13 +97,19 @@ article.blog-entry {
   float:left;
   border:1px solid #888;
   margin:5px;
-  padding:10px;
+  padding:0px;
   font-size:10pt;
   overflow: hidden;
+  background-color: #f7f5f1;
+  height: 20em;
+  position: relative;
 }
 
 p.blog-entry-more {
   text-align: right;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
 }
 
 p.blog-entry-date {
@@ -94,25 +118,31 @@ p.blog-entry-date {
 }
 
 article.blog-entry p {
-  margin:0.2em;
+  margin:0.2em 10px;
+  
 }
 
 article.blog-entry h3 {
   font-size:12pt;
-  margin-bottom:0.2em;
+  font-weight: bold;
+  margin-bottom:10px;
   margin-top:0;
-  font-weight:normal;
+  padding: 10px;
+  border-bottom: 1px solid #888; 
+  background-color: #EFE4D3;
 }
 
 a {
-  color: #2129EA;
+  color: #7f066b;
   text-decoration:none;
 }
 
 a:hover {
-  color: #1E226E;
+  color: #4B332F;
   text-decoration:underline;
 }
+
+
 
 article table {
     font-size:9pt;
@@ -213,7 +243,8 @@ p.author-list { margin-top: 0; }
 
 div#graph_container_container {
   width:100%;
-
+  background-color: #ffffff;
+  margin-bottom: 0.5em;
   height:400px;
   overflow:auto;
 }

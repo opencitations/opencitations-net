@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% load hosts %}
+
+{% block subnav %}
+<nav>
+<ul>
+        <li><a href="{% host_url journal-list on data %}">Journals</a></li>
+        <li><a href="{% host_url article-list on data %}">Articles</a></li>
+        <li><a href="{% host_url search on data %}">Search</a></li>
+        <li><a href="{% host_url sparql on data %}">SPARQL</a></li>
+        <li><a href="{% host_url source-data on data %}">Source data</a></li>
+</ul>
+</nav>
+{% endblock %}
+
+{% block body %}
+<article>
+  <h1>Explore the data</h1>
+  
+  <p>Stuff</p>
+</article>
+{% endblock %}

@@ -16,15 +16,11 @@
       <ul>
         <li><a href="{% host_url index on data %}">Home</a></li>
         <li><a href="{% host_url about on data %}">About</a></li>
-        <li><a href="{% host_url journal-list on data %}">Journals</a></li>
-        <li><a href="{% host_url article-list on data %}">Articles</a></li>
-        <li><a href="{% host_url search on data %}">Search</a></li>
-        <li><a href="{% host_url sparql on data %}">SPARQL</a></li>
+        <li><a href="{% host_url explore-data on data %}">Explore the data</a></li>
         <li><a href="{% host_url source-code on data %}">Source code</a></li>
-        <li><a href="{% host_url source-data on data %}">Source data</a></li>
         <li><a href="{% host_url contact on data %}">Contact</a></li>
         <li><a href="{% host_url license on data %}">License</a></li>
-      </ul>
+      </ul>{% block subnav %}{% endblock %}
     </nav>
 
     {% block body %}{% endblock %}
@@ -46,6 +42,6 @@
       </p>
       <div style="clear:both"> </div>
     </footer>
-  </div>{% include "analytics/include.html" %}</body>
+  </div>{% if google_analytics %}{% include "analytics/include.html" %}{% endif %}</body>
 </html>
 
